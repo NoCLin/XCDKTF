@@ -11,7 +11,7 @@ async function index() {
         console.log("Not a cdktf directory.");
         return;
     }
-    const cdktfDir = new CDKTFDirectory(dir, true);
+    const cdktfDir = new CDKTFDirectory(dir, false);
     const stacks = cdktfDir.stacks();
     const stackName = await promptSelect({
         message: "Select stack: ",
