@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Actions } from "./components/Actions.js";
 import { SelectWithAutoComplete } from "./components/Select.js";
 export async function promptSelect({ options, message, getOptions, }) {
+    let result = "";
     function Inner() {
         const { exit } = useApp();
         const [enabled, setEnabled] = useState(true);
@@ -13,7 +14,6 @@ export async function promptSelect({ options, message, getOptions, }) {
                 exit();
             } }));
     }
-    let result = "123";
     const { waitUntilExit } = render(React.createElement(Inner, null));
     await waitUntilExit();
     return result;

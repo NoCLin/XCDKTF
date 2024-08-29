@@ -6,8 +6,8 @@
     "dist/**"
   ],
   "scripts": {
-    "prettier": "prettier src/**/*.ts* --write",
-    "lint": "eslint --fix .",
+    "prettier": "prettier src/**/*.ts* src/*.ts* --write",
+    "lint": "eslint --fix ./src",
     "start": "node --no-warnings --loader ts-node/esm src/index.tsx",
     "build": "tsc"
   },

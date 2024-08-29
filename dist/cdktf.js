@@ -9,6 +9,7 @@ import { execSync } from "child_process";
  */
 function runShell(command, cwd, pipe) {
     try {
+        console.log(`Running command: ${command.join(" ")}`);
         const stdout = execSync(command.join(" "), {
             cwd,
             stdio: (pipe ?? true) ? "pipe" : "inherit",
@@ -17,12 +18,8 @@ function runShell(command, cwd, pipe) {
         return { stdout: stdout?.toString() ?? "", stderr: "" };
     }
     catch (error) {
-        // if (error instanceof typeof SpawnSyncReturns) { /* empty */ }
-        // if (error.hasOwnProperty("stderr")) {
-        //     console.log((error as SpawnSyncReturns<Buffer>).stderr.toString());
-        // }
-        console.log(error);
-        throw new Error("unknown error");
+        console.log(`Run command ${command} failed.`);
+        throw error;
     }
 }
 /**
@@ -118,12 +115,12 @@ export class CDKTFStack {
         if (!fs.existsSync(this.workingDirectory)) {
             throw new Error(`Directory not found: ${this.workingDirectory}`);
         }
+        runShell(["terraform", "init", "-migrate-state"], this.workingDirectory);
     }
     diff() {
         runShell(["terraform", "plan", "-no-color"], this.workingDirectory, false);
     }
     states() {
-        runShell(["terraform", "init", "-migrate-state"], this.workingDirectory);
         const { stdout } = runShell(["terraform", "state", "list"], this.workingDirectory);
         return stdout.split("\n").filter(Boolean);
     }

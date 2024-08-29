@@ -8,7 +8,7 @@ async function index() {
     const dir = process.argv[2] || process.cwd();
     console.log(`Running xcdktf on ${dir}`);
     if (!fs.existsSync(path.join(dir, "cdktf.json"))) {
-        console.log("Not a cdktf directory.");
+        console.log(`${dir} is not a cdktf directory.`);
         return;
     }
     const cdktfDir = new CDKTFDirectory(dir, false);

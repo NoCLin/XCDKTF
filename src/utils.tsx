@@ -14,6 +14,8 @@ export async function promptSelect({
   getOptions?: () => Promise<string[]>;
   message?: string;
 }) {
+  let result = "";
+
   function Inner() {
     const { exit } = useApp();
     const [enabled, setEnabled] = useState(true);
@@ -33,7 +35,6 @@ export async function promptSelect({
     );
   }
 
-  let result = "123";
   const { waitUntilExit } = render(<Inner />);
   await waitUntilExit();
   return result;

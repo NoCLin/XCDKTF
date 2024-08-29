@@ -11,7 +11,7 @@ async function index() {
   console.log(`Running xcdktf on ${dir}`);
 
   if (!fs.existsSync(path.join(dir, "cdktf.json"))) {
-    console.log("Not a cdktf directory.");
+    console.log(`${dir} is not a cdktf directory.`);
     return;
   }
 

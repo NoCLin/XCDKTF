@@ -15,6 +15,7 @@ function runShell(
   pipe?: boolean,
 ): { stdout: string; stderr: string } {
   try {
+    console.log(`Running command: ${command.join(" ")}`);
     const stdout = execSync(command.join(" "), {
       cwd,
       stdio: (pipe ?? true) ? "pipe" : "inherit",
@@ -22,14 +23,8 @@ function runShell(
     // TODO: stderr
     return { stdout: stdout?.toString() ?? "", stderr: "" };
   } catch (error: unknown) {
-    // if (error instanceof typeof SpawnSyncReturns) { /* empty */ }
-
-    // if (error.hasOwnProperty("stderr")) {
-    //     console.log((error as SpawnSyncReturns<Buffer>).stderr.toString());
-    // }
-
-    console.log(error);
-    throw new Error("unknown error");
+    console.log(`Run command ${command} failed.`);
+    throw error;
   }
 }
 
@@ -149,6 +144,7 @@ export class CDKTFStack {
     if (!fs.existsSync(this.workingDirectory)) {
       throw new Error(`Directory not found: ${this.workingDirectory}`);
     }
+    runShell(["terraform", "init", "-migrate-state"], this.workingDirectory);
   }
 
   diff() {
@@ -156,7 +152,6 @@ export class CDKTFStack {
   }
 
   states(): string[] {
-    runShell(["terraform", "init", "-migrate-state"], this.workingDirectory);
     const { stdout } = runShell(
       ["terraform", "state", "list"],
       this.workingDirectory,
